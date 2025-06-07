@@ -27,11 +27,52 @@ class _ExpensesState extends State<Expenses> {
   ];
 
   void _openAddExpenseOverlay() {
-    showModalBottomSheet(context: context, builder: (ctx) => NewExpense());
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewExpense(onAddExpenses: _onAddExpenses),
+    );
+  }
+
+  void _onAddExpenses(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
+  }
+
+  void _onRemoveExpenses(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 4),
+        content: Text('Đã xóa một Chi phí!'),
+        action: SnackBarAction(
+          label: 'Khôi phục',
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = Text('No expense found. Start adding some!');
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expensesList: _registeredExpenses,
+        onRemoveExpenses: _onRemoveExpenses,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Expenses Tracker'),
@@ -39,12 +80,7 @@ class _ExpensesState extends State<Expenses> {
           IconButton(onPressed: _openAddExpenseOverlay, icon: Icon(Icons.add)),
         ],
       ),
-      body: Column(
-        children: [
-          Text('The chart'),
-          Expanded(child: ExpensesList(expensesList: _registeredExpenses)),
-        ],
-      ),
+      body: Column(children: [Text('The chart'), Expanded(child: mainContent)]),
     );
   }
 }
