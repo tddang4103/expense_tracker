@@ -1,37 +1,57 @@
 import 'package:expense_tracker/expenses.dart';
 import 'package:flutter/material.dart';
 
-final kColorTheme = ColorScheme.fromSeed(
+final kColorScheme = ColorScheme.fromSeed(
   seedColor: Color.fromARGB(255, 96, 51, 181),
+);
+
+final kDarkColorScheme = ColorScheme.fromSeed(
+  brightness: Brightness.dark,
+  seedColor: Color.fromARGB(255, 5, 9, 125),
 );
 
 void main() {
   runApp(
     MaterialApp(
-      theme: ThemeData().copyWith(
+      darkTheme: ThemeData.dark().copyWith(
         useMaterial3: true,
-        colorScheme: kColorTheme,
-        appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: kColorTheme.onPrimaryContainer,
-          foregroundColor: kColorTheme.primaryContainer,
-        ),
+        colorScheme: kDarkColorScheme,
         cardTheme: CardTheme().copyWith(
-          color: kColorTheme.secondaryContainer,
+          color: kDarkColorScheme.secondaryContainer,
           margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: kColorTheme.primaryContainer,
+            backgroundColor: kDarkColorScheme.primaryContainer,
+            foregroundColor: kDarkColorScheme.onPrimaryContainer,
+          ),
+        ),
+      ),
+      theme: ThemeData().copyWith(
+        useMaterial3: true,
+        colorScheme: kColorScheme,
+        appBarTheme: const AppBarTheme().copyWith(
+          backgroundColor: kColorScheme.onPrimaryContainer,
+          foregroundColor: kColorScheme.primaryContainer,
+        ),
+        cardTheme: CardTheme().copyWith(
+          color: kColorScheme.secondaryContainer,
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kColorScheme.primaryContainer,
           ),
         ),
         textTheme: ThemeData().textTheme.copyWith(
           titleLarge: TextStyle(
-            fontWeight: FontWeight.normal,
-            color: kColorTheme.onSecondaryContainer,
-            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: kColorScheme.onSecondaryContainer,
+            fontSize: 17,
           ),
         ),
       ),
+      // themeMode: ThemeMode.light,
       home: const Expenses(),
     ),
   );
